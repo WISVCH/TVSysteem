@@ -7,7 +7,14 @@ body {
   padding-bottom: 40px;
   color: #5a5a5a;
   width:100%;
+  min-height: 100%;
+  overflow-y: auto;
+  background: #000000;
 }
+
+body .page { display: none; }
+body[data-page="admin"] .page.admin { display: block; }
+body[data-page="front"] .page.carousel { display: block; }
 
 
 /* CUSTOMIZE THE NAVBAR
@@ -55,7 +62,6 @@ body {
 /* Carousel base class */
 .carousel {
   margin-bottom: 60px;
-  background: black;
 }
 
 .carousel .container {
@@ -104,6 +110,18 @@ body {
 #content .container-fluid {
   padding-top: 100px;
 }
+
+.menu .nav-header { position: relative; }
+.add-item-btn { position: absolute; right: 15px; line-height: 16px; font-size: 1.8em; vertical-align: baseline; top: 0; width: 20px; height: 20px; border-radius: 10px; background: #ddd; text-align: center; }
+.add-item-btn:hover { cursor: pointer; }
+
+.type-spec[data-type='poster'] > [data-type='poster'],
+.type-spec[data-type='custom'] > [data-type='custom'],
+.type-spec[data-type='video'] > [data-type='video'],
+.type-spec[data-type='ical'] > [data-type='ical'] {
+  display: block;
+}
+.type-spec > div { display: none; }
 
 /* MARKETING CONTENT
 -------------------------------------------------- */

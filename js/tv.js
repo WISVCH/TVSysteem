@@ -1,21 +1,86 @@
 (function() {
 	var tvApi = {
-		init: fillHtml
+		init: fillHtml,
+		fill: fillItems,
+		items: [],
+		defaults: {}
 	};
 
 	var inited = false,
-		selector = "#content",
+		selector = "#content > .admin",
 		html = {
-		"container": "<div class='container-fluid'><div class='row-fluid'><div class='span3 menu'></div><div class='span9 single-item'></div></div></div>",
-		"menu": "<div class='well sidebar-nav'><ul class='nav nav-list'><li class='nav-header status-active'>Actief</li><li class='nav-header status-inactive'>Inactief</li></ul></div>",
-		"singleTemplate": "<h1>Single Template</h1>"
+		"container": "<div class='container-fluid'><div class='row-fluid'><div class='span3 menu'></div><div class='span9 well single-item'></div></div></div>",
+		"menu": "<div class='well sidebar-nav'><ul class='nav nav-list'><li class='nav-header status-active' data-status='active'>Actief</li><li class='nav-header status-inactive' data-status='inactive'>Inactief</li></ul></div>",
+		"singleTemplate": $("#template-single").html()
 	};
+
+	var editingId = false;
+
+	function open(id){
+		editingId = id;
+		var item = get(id);
+
+		$(".single-item [data-key]").each(function(el){
+			var key = this.dataset.key;
+			if(typeof item[key] == "undefined" && typeof tvApi.defaults[key] != "undefined"){
+				$(this).attr("placeholder", tvApi.defaults[key]);
+			} else {
+				if(["H1", "DIV"].indexOf(this.nodeName) > -1)
+					$(this).text(item[key]);
+				else
+					$(this).val(item[key]);
+			}
+		});
+		
+		$("#itemType").bind("change", function(){
+			item.type = this.value;
+			$(".type-spec").attr('data-type', item.type);
+		}).trigger("change");
+	}
+
+	function save(){
+		var item = {};
+
+		$(".single-item [data-key]:visible, .single-item [data-key][type=hidden]").each(function(el){
+			var key = this.dataset.key;
+			item[key] = (["H1", "DIV"].indexOf(this.nodeName) > -1) ? $(this).text() : $(this).val();
+		});
+
+		set(item.id, item);
+	}
+
+	function get(id){
+		return _.find(tvApi.items, function(item){ return item.id == id; });
+	}
+	function set(id, obj){
+		var i = get(id);
+		for(n in i){
+			delete i[n];
+		}
+		_.extend(i, obj);
+	}
 
 	function fillHtml(){
 		var sel = $(selector).html(html.container);
 		sel.find(".menu").html(html.menu);
 		sel.find(".single-item").html(html.singleTemplate);
+		sel.find(".nav-header").each(function(i, s){
+			s = $(s);
+			s.append("<div class='add-item-btn'>+</div>");
+		});
+		sel.delegate(".add-item-btn", "click", function(){
+			tvApi.items.push({
+				id: (new Date()).getTime(),
+				name: "New event",
+				active: $(this).parents("[data-status=active]").size() > 0
+			});
+			tvApi.fill(tvApi.items);
+		}).delegate(".menu li.item", "click", function(){ 
+			$(this).addClass("active").siblings().removeClass("active");
+			open(this.id);
+		}).delegate(".single-item [type=submit]", "click", save);
 		inited = true;
+		return tvApi;
 	}
 
 	function fillItems(items, filter){
@@ -32,7 +97,8 @@
 						s.remove().insertAfter($(selector).find(".nav-header.status-inactive"));
 					}
 					// Update
-					s.text(item.name).removeClass("active, inactive").addClass("status-" + item.active ? "active" : "inactive");
+					s.removeClass("active, inactive").addClass("status-" + (item.active ? "active" : "inactive"));
+					s.children("a").text(item.name);
 					return false;
 				} else {
 					return true;
@@ -40,7 +106,12 @@
 			}),
 			function(item){
 				var header = $(selector).find(item.active ? ".nav-header.status-active" : ".nav-header.status-inactive");
-				$("<li></li>").text(item.name).addClass("item").addClass("status-" + item.active ? "active" : "inactive").insertAfter(header);
+				var li = $("<li><a></a></li>")
+					.addClass("item item-" + item.id)
+					.addClass("status-" + (item.active ? "active" : "inactive"))
+					.attr("id", item.id);
+				li.insertAfter(header);
+				li.children("a").text(item.name).attr("href", "#item-"+item.id);
 			}
 		);
 
@@ -53,11 +124,53 @@
 				s.addClass("no-match");
 			}
 		});
+
+		tvApi.items = items;
+		return tvApi;
 	}
 
     // export api
     window.tvApi = tvApi;
 })();
+
+tvApi.init().fill([
+	{
+		id: 1,
+		name: "Informaticalezing Q1",
+		active: false
+	},
+	{
+		id: 2,
+		name: "Wiskundelezing",
+		active: true
+	},
+	{
+		id: 3,
+		name: "Informaticalezing",
+		active: true
+	}
+]).fill([
+	{
+		id: 1,
+		name: "Informaticalezing Q1",
+		active: true
+	},
+	{
+		id: 2,
+		name: "Wiskundelezing",
+		active: false
+	},
+	{
+		id: 3,
+		name: "Informaticalezing",
+		active: false
+	}
+]);
+
+function setPage(page){
+	document.body.dataset.page = page;
+}
+
 /*
 <div class="container-fluid">
       <div class="row-fluid">
