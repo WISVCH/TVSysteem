@@ -65,7 +65,9 @@
 })();
 
 if (fullScreenApi.supportsFullScreen) {
-    document.getElementById("fullscreen-btn").addEventListener('click', function() {
+    var btn = document.getElementById("fullscreen-btn");
+    if(btn)
+    btn.addEventListener('click', function() {
     	if(!fullScreenApi.isFullScreen()) {
 	        fullScreenApi.requestFullScreen(document.body);
 	        this.className = "active";

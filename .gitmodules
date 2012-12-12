@@ -1,3 +1,6 @@
 [submodule "lib/bootstrap"]
 	path = lib/bootstrap
 	url = https://github.com/twitter/bootstrap.git
+[submodule "lib/shiftingtiles"]
+	path = lib/shiftingtiles
+	url = https://github.com/hermanbanken/shiftingtiles.git

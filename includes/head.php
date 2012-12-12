@@ -14,4 +14,6 @@
 	<link href="css/bootstrap.css" rel="stylesheet" media="screen">
 	<link href="css/bootstrap-responsive.css" rel="stylesheet" media="screen">
 	<link href="css/hero.css" rel="stylesheet" media="screen">
+	<link rel="stylesheet/less" type="text/css" href="lib/shiftingtiles/shiftingtiles.less">
+	<script src="lib/shiftingtiles/less-1.3.1.min.js" type="text/javascript"></script>
 </head>

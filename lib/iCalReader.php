@@ -49,14 +49,19 @@ class ICal
      * @param {string} $filename The path to the iCal-file
      *
      * @return Object The iCal-Object
-     */ 
-    public function __construct($filename) 
+     */
+    public function __construct($filename, $isdata = false) 
     {
         if (!$filename) {
             return false;
         }
+
+        if ($isdata === true){
+            $lines = preg_split("/(\r?\n)+/", $filename);
+        } else {
+            $lines = file($filename, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        }
         
-        $lines = file($filename, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
         if (stristr($lines[0], 'BEGIN:VCALENDAR') === false) {
             return false;
         } else {

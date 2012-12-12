@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <?php include("includes/head.php"); ?>
+  <body>
+  
+    <div id="content">
+      <div class="gallery"></div>
+    </div>
+
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="lib/underscore-1.4.2/underscore-min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="lib/shiftingtiles/shiftingtiles.js"></script>
+    <script src="js/fullscreen.js"></script>
+    <script src="js/tv.js"></script>
+    <script src="js/flitciefeed.js"></script>
+	<script>
+		/*FlitCie.album(function(list){
+			$(".gallery").shiftingtiles(_.map(list, function(el){
+				return el.src;
+			}));
+		});
+		*/
+		$(".gallery").shiftingtiles([
+			"lib/shiftingtiles/NatGeo04.jpg",
+			"lib/shiftingtiles/NatGeo04.jpg",
+			"lib/shiftingtiles/NatGeo04.jpg",
+			"lib/shiftingtiles/NatGeo04.jpg",
+			"lib/shiftingtiles/NatGeo04.jpg",
+			"lib/shiftingtiles/NatGeo04.jpg",
+			"lib/shiftingtiles/NatGeo04.jpg",
+			"lib/shiftingtiles/NatGeo04.jpg",
+		]);
+		
+	</script>
+  </body>
+</html>
