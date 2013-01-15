@@ -33,19 +33,20 @@ function rest(resource, parameters, fields){
 
 
 function fetch(callback){
-	$.getJSON(rest("nodes", { type: "news,event", language: "nl", status: 1 }), callback);
+	$.getJSON(rest("all"), callback);
 }
 
 fetch(update);
 
 function update(nodes){
 	nodes.push({
-		created: (new Date).getTime()/1000,
+		nid: "today",
+		date_created: (new Date).getTime()/1000,
 		title: "Vandaag",
 		status: 1,
 		type: "today"
 	});
-	nodes.sort(sortNodes);
+	nodes = nodes.sort(sortNodes);
 	updateSidebar(nodes);
 	updateMain(nodes);
 }
@@ -57,23 +58,51 @@ function update(nodes){
  * @param b - node B
  * @return Integer defining the difference between the nodes
  */
-function sortNodes(a, b){ return 1; }
+function sortNodes(a, b){
+	console.log(attrLookup(a, 'date_sort'), attrLookup(b, 'date_sort'), attrLookup(b, 'date_sort') - attrLookup(a, 'date_sort'));
+	return attrLookup(b, 'date_sort') - attrLookup(a, 'date_sort');	
+}
 
 /**
  * Lookup attribute for <node>
  */
 function attrLookup(node, key) {
 	
-	if(key == 'date_view')
-		return new Date(node.created*1000).toString("ddd d MMMM");
+	if(key == 'costs')
+		return node.costs && parseInt(node.costs.substr(1)) ? node.costs : "";
 	
-	if(key == 'date_sort')
-		return node.created;
+	if(key == 'date_view'){
+		var date;
+		switch(node.type){
+			case 'event': 
+				date = strip(node.date_event); break;
+			default: 
+				date = new Date(node.date_created*1000).toString("ddd d MMMM");
+		}
+		return date;
+	}		
+	
+	if(key == 'date_sort'){
+		var date;
+		switch(node.type){
+			case 'event': 
+				date = Date.parse(node.date_event_raw.value).getTime(); break;
+			default: 
+				date = node.date_created*1000;
+		}
+		return date;
+	}
 		
 	if(typeof node[key] != "undefined")
 		return node[key];
 }
-function formatDate(){ return arguments[0]; }
+
+function strip(html)
+{
+   var tmp = document.createElement("DIV");
+   tmp.innerHTML = html;
+   return tmp.textContent||tmp.innerText;
+}
 
 /** 
  * updateSidebar
@@ -99,7 +128,20 @@ function updateSidebar(nodes){
  * 
  * You can hook into this by: @TODO
  */
-function updateMain(nodes){}
+function updateMain(nodes){
+	var $template = $("#content ul li.template");
+	_.each(nodes, function(node){
+		var $n = fillTemplate(
+			$template.clone(), 
+			{
+				title: node.title,
+				date: attrLookup(node, 'date_view'),
+				costs: attrLookup(node, 'costs'),
+				location: node.location
+			}
+		).insertAfter($template).addClass(node.type).attr("id", node.nid);
+	});
+}
 
 /**
  * fillTemplate 
