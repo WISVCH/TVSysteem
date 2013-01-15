@@ -4,63 +4,17 @@
 	<link href="css/frame.css" type="text/css" rel="stylesheet" />
 	<title>TV Systeem</title>
 	<script src="lib/shiftingtiles/jquery-1.8.3.js"></script>
-	<script>
-		function makeFixed(){
-			$(".content li.active").prevAll().each(function(){
-				$(this).height($(this).height());
-				$(this).css("overflow", "hidden");
-			});
-		}
-		function releaseFixed(){
-			$(".content li").each(function(){
-				$(this).removeAttr("style");
-			});
-			scrollTo(false, 0);
-		}
-		function scrollTo(el, duration){
-			if(typeof duration == "undefined") duration = 500;
-			if(!el){
-				var id = $(document.body).attr("data-scroll");
-			} else {
-				var id = $(el).attr("data-id");
-				$(document.body).attr("data-scroll", id);
-			}
-			
-			// Go
-			$(".content *").removeClass("active");
-			var $item = $("#"+id).addClass("active");
-			$(".content").animate({
-				scrollTop: $item.position().top + $(".content").scrollTop() - 5
-			}, duration);
-		}
-		$(function(){
-			$("body").on("keyup", function(event){
-				if(String.fromCharCode(event.keyCode) == "A"){
-					makeFixed();
-					$(this).toggleClass("full");
-					setTimeout(releaseFixed, 550);
-				}
-			});
-			
-			$("body").on("click", ".bar li[data-id]", function(){
-				$(this).siblings().removeClass("active");
-				$(this).addClass("active");
-				scrollTo(this);
-			});
-		});
-	</script>
+	<script src="lib/underscore-1.4.2/underscore-min.js"></script>
+	<script src="lib/date.js/build/date-nl-NL.js"></script>
+	<script src="js/tv.js"></script>
+	<script src="js/tv.update.js"></script>
 </head>
 <body>
 	<div class="bar" id="bar">
 		<div class="scroll">
 			<div class="logo"></div>
-			<ul>
-				<li data-id="10" class="active">NWERC 2012 <span class="date">3 november 2012</span></li>
-				<li data-id="15">Tentamens <span class="date">7 januari 2013</span></li>
-				<li class="today">Vandaag <span class="date">13 januari 2013</span></li>
-				<li data-id="20">Algemene Vergadering 5 <span class="date">15 januari 2013</span></li>
-				<li data-id="30">Alumni Nieuwjaarsreceptie <span class="date">18 januari 2013</span></li>
-				<li data-id="40">Wintersport <span class="date">1 februari 2013</span></li>
+			<ul class="activities">
+				<li class="template" data-id="" class="active"><span class="title"></span> <span class="date"></span></li>
 			</ul>
 			<h2>CH calender op je telefoon?</h2>
 			<div class="qr"><img src="images/clear_1x1.png" style="width:100%;" /></div>

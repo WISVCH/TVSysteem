@@ -5,6 +5,10 @@
 .bar .scroll { margin: 5px; }
 .content .scroll { margin: 5px; padding-bottom: 100%; }
 
+.template {
+	display: none;
+}
+
 .bar .logo { 
 	margin: 0px -5px 0 -5px; 
 	text-align: center; 
