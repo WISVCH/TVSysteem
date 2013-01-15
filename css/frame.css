@@ -1,10 +1,17 @@
 .bar { position: absolute; left: 0; top: 0; bottom: 0; width: 270px; height: 100%; }
-.bar .logo { margin: 0px -5px 0 -5px; text-align: center; }
 .content { position: absolute; right: 0; top: 0; bottom: 0; left: 270px; height: 100%; }
 
 .bar, .content { overflow-x: hidden; overflow-y: scroll; -webkit-transform:translationZ(0); }
 .bar .scroll { margin: 5px; }
 .content .scroll { margin: 5px; padding-bottom: 100%; }
+
+.bar .logo { 
+	margin: 0px -5px 0 -5px; 
+	text-align: center; 
+	background: url('../images/logo_ch.png') no-repeat center center; 
+	height: 94px;
+	-webkit-app-region: drag; 
+}
 
 .bar ul { padding: 0; list-style: none; }
 .bar ul li {

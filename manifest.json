@@ -1,0 +1,11 @@
+{
+  "name": "TV Systeem",
+  "description": "Het systeem dat op de TV's in en rond het hok draait met de komende activiteiten",
+  "manifest_version": 3,
+  "version": "0.1",
+  "app": {
+    "background": {
+      "scripts": ["js/background.js"]
+    }
+  }
+}
