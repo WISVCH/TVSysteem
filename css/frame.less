@@ -1,9 +1,14 @@
 body {
 	> .bar, > .content {
-		overflow-x: hidden; overflow-y: scroll; -webkit-transform:translationZ(0);
+		overflow-x: hidden; overflow-y: scroll; 
+		
+		-webkit-transform:translationZ(0);
+		/* Animations */
+		-webkit-transition: left .5s linear, width .5s linear;
 		
 		.scroll { margin: 5px; }
 	}
+	
 	> .bar { 
 		position: absolute; left: 0; top: 0; bottom: 0; width: 270px; height: 100%;
 	
@@ -17,8 +22,26 @@ body {
 	}
 	> .content { 
 		position: absolute; right: 0; top: 0; bottom: 0; left: 270px; height: 100%; 
+		background: #aaa;
 	
 		.scroll { padding-bottom: 100%; }
+	}
+	
+	> .tools-wrapper {
+		position: absolute;
+		right: 0;
+		width: 80px;
+		top: 0;
+		bottom: 0;
+		z-index: 1000;
+		
+		&:hover .tools { display: block; }
+		.tools {
+			position: absolute;
+			top: 0; left: 0; right: 0; bottom: 0;
+			display: block;
+			background: rgba(0,0,0,.7);
+		}
 	}
 }
 
@@ -67,7 +90,48 @@ body {
 		.date:before {	content: " - "; }
 		.location:before {	content: " - "; }
 		.costs:before {	content: " - "; }
+		
+		.body {
+			position: relative;
+			overflow: hidden;
+		}
+		
+		.image-wrapper {
+			float: right;
+			padding: 0 0 0 15px;
+			height: 100%;
+			
+			img.image { 
+				max-height: 300px;
+				max-width: 300px;
+			}
+		}
 	}
+}
+
+.tools {
+	ul { list-style: none; margin: 0; padding: 10px; }
+	ul li { margin: 10px 0; padding: 0; }
+	ul li a {
+		display: block;
+		margin: 0;
+		padding: 0;
+		width: 60px;
+		height: 60px;
+		content: "";
+		text-indent: -9000px;
+		background: no-repeat center;
+	}
+	ul li:hover {
+		-webkit-transform: scale(1.05);
+	}
+	li.icon-power a{ background-image: url('../lib/icons/metro/WindowsPhone/dark/appbar.power.png'); }
+	li.icon-full.active a{ background-image: url('../lib/icons/metro/WindowsPhone/dark/appbar.arrow.collapsed.png'); }
+	li.icon-full a{ background-image: url('../lib/icons/metro/WindowsPhone/dark/appbar.arrow.expand.png'); }
+	li.icon-play a{ background-image: url('../lib/icons/metro/WindowsPhone/dark/appbar.control.play.png'); }
+	li.icon-play.active a{ background-image: url('../lib/icons/metro/WindowsPhone/dark/appbar.control.pause.png'); }
+	li.icon-up a{ background-image: url('../lib/icons/metro/WindowsPhone/dark/appbar.chevron.up.png'); }
+	li.icon-down a{ background-image: url('../lib/icons/metro/WindowsPhone/dark/appbar.chevron.down.png'); }
 }
 
 .content .full {
@@ -82,6 +146,7 @@ body {
 	background-size: contain;
 	width: 100%;
 }
+.clear { clear: both; }
 
 body.full .bar { left: -270px; }
 body.full .content { left: 0; }
@@ -96,9 +161,3 @@ h2 { font-size: 18pt; }
 /* Color scheme */
 .bar { color: #fff; background: black; }
 .bar .date { color: #aaa; }
-.content { background: #aaa; }
-
-/* Animations */
-.bar, .content { 
-	-webkit-transition: left .5s linear, width .5s linear;
-}
