@@ -52,7 +52,7 @@ function update(nodes){
 	nodes.push(today);
 	nodes.sort(sortNodes);
 	
-	nodes = nodes.slice((c = nodes.indexOf(today))-5, c+5);
+	nodes = nodes.slice((c = nodes.indexOf(today))-4, c+6);
 	
 	updateSidebar(nodes);
 	updateMain(nodes);
@@ -75,11 +75,12 @@ function sortNodes(a, b){
 function attrLookup(node, key) {
 	
 	if(key == 'costs')
-		return node.costs && parseInt(node.costs.substr(1)) ? node.costs : "";
+		return typeof node.costs == 'string' && parseInt(node.costs.substr(1)) ? node.costs : "";
 	
 	if(key == 'date_view'){
 		var date;
 		switch(node.type){
+			case 'tv_item':
 			case 'event': 
 				date = strip(node.date_event);
 				break;
@@ -89,10 +90,21 @@ function attrLookup(node, key) {
 		return date;
 	}		
 	
+	if(key == 'body'){
+		var body;
+		switch(node.type){
+			case 'tv_item':
+				body = "<div class='full'>"+node['image-fullscreen']+"</div>";
+			default: body = node.body;
+		}
+		return body;
+	}
+	
 	if(key == 'image'){
-		var regex = /src="([^"]*)"/ig;
-		if(regex.test(node.image)){
-			var src = /src="([^"]*)"/ig.exec(node.image).pop();
+		var regexImg = /src="([^"]*)"/ig,
+			match = regexImg.exec(node.image);
+		if(match !== null){
+			var src = match.pop();
 			return src.replace("http://ch/", "https://ch.tudelft.nl/")
 		}
 	}
@@ -100,6 +112,7 @@ function attrLookup(node, key) {
 	if(key == 'date_sort'){
 		var date;
 		switch(node.type){
+			case 'tv_item':
 			case 'event': 
 				date = Date.parseExact(node.date_event_raw.value, "yyyy-MM-dd HH:mm:ss"); // format: "2012-09-03 06:55:00"
 				break;
@@ -154,7 +167,7 @@ function updateMain(nodes){
 				date: attrLookup(node, 'date_view'),
 				costs: attrLookup(node, 'costs'),
 				location: node.location,
-				content: node.body,
+				content: attrLookup(node, 'body'),
 				image: attrLookup(node, 'image')
 			}
 		).insertBefore($template).addClass(node.type).attr("id", node.nid);
@@ -212,6 +225,7 @@ function fillImage($elem, src){
 			};
 			request.send();
 		} else {
+			if(blob[key].indexOf("undefined") != -1) debugger;
 			$elem.attr("src", blob[key]);
 		}
 	});

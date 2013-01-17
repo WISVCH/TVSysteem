@@ -19,14 +19,15 @@ $(function(){
 				break;
 			
 			case 'full':
-				if(!$parent.hasClass("active")){
+				$button = $("[data-action=full]");
+				if(!$button.hasClass("active")){
 					if(chrome && chrome.app) chrome.app.window.current().maximize();
 					document.body.webkitRequestFullscreen();
 				} else {
 					document.webkitExitFullscreen();
 					if(chrome && chrome.app) chrome.app.window.current().restore();
 				}
-				$parent.toggleClass("active");
+				$button.toggleClass("active");
 				break;
 				
 			case 'play':

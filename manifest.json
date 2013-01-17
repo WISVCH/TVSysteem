@@ -11,6 +11,7 @@
   "permissions": [
       "http://ch/",
       "https://ch.tudelft.nl/",
+      "http://huidigeroosters.tudelft.nl/",
       "storage"
   ]
 }
