@@ -7,3 +7,6 @@
 [submodule "lib/date.js"]
 	path = lib/date.js
 	url = https://github.com/datejs/Datejs.git
+[submodule "lib/icons/metro"]
+	path = lib/icons/metro
+	url = https://github.com/Templarian/WindowsIcons.git

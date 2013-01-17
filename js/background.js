@@ -1,11 +1,11 @@
 chrome.app.runtime.onLaunched.addListener(function() { 
   	chrome.app.window.create('index.html', {
-      width: 800,
-      height: 600,
+      width: window.screen.width,
+      height: window.screen.height,
       minWidth: 800,
       minHeight: 600,
-      left: 10,
-      top: 10,
+      left: window.screen.offsetLeft,
+      top: window.screen.offsetTop,
       type: 'normal'
     });
 });

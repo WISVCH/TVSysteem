@@ -72,6 +72,13 @@ body > .tools-wrapper .tools {
   padding: 5px;
   position: relative;
 }
+.bar ul li span.title {
+  display: block;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+}
 .bar ul li span.date {
   display: block;
 }
@@ -155,6 +162,9 @@ body > .tools-wrapper .tools {
 }
 .tools ul li:hover {
   -webkit-transform: scale(1.05);
+}
+.tools li.spacer {
+  height: 60px;
 }
 .tools li.icon-power a {
   background-image: url('../lib/icons/metro/WindowsPhone/dark/appbar.power.png');

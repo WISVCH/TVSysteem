@@ -41,14 +41,19 @@ function fetch(callback){
 }
 
 function update(nodes){
-	nodes.push({
+	var c, today = {
 		nid: "today",
 		date_created: (new Date).getTime()/1000,
 		title: "Vandaag",
 		status: 1,
 		type: "today"
-	});
+	};
+	
+	nodes.push(today);
 	nodes.sort(sortNodes);
+	
+	nodes = nodes.slice((c = nodes.indexOf(today))-5, c+5);
+	
 	updateSidebar(nodes);
 	updateMain(nodes);
 }

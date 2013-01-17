@@ -57,6 +57,7 @@ body {
 		padding: 5px;
 		position: relative;
 		
+		span.title { display: block; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; width: 100%; }
 		span.date { display: block; }
 		&.active { margin-left: 10px; }
 		&.active:before {
@@ -125,6 +126,7 @@ body {
 	ul li:hover {
 		-webkit-transform: scale(1.05);
 	}
+	li.spacer {	height: 60px; }
 	li.icon-power a{ background-image: url('../lib/icons/metro/WindowsPhone/dark/appbar.power.png'); }
 	li.icon-full.active a{ background-image: url('../lib/icons/metro/WindowsPhone/dark/appbar.arrow.collapsed.png'); }
 	li.icon-full a{ background-image: url('../lib/icons/metro/WindowsPhone/dark/appbar.arrow.expand.png'); }

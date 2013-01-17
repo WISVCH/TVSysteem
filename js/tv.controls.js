@@ -6,6 +6,12 @@ $(function(){
 		var $parent = $(this).parent();
 		var action = $parent.attr("data-action");
 		
+		handle(action);
+	
+		return false;
+	});
+	
+	function handle(action){
 		switch(action){
 		
 			case 'close': 
@@ -14,9 +20,11 @@ $(function(){
 			
 			case 'full':
 				if(!$parent.hasClass("active")){
+					if(chrome && chrome.app) chrome.app.window.current().maximize();
 					document.body.webkitRequestFullscreen();
 				} else {
 					document.webkitExitFullscreen();
+					if(chrome && chrome.app) chrome.app.window.current().restore();
 				}
 				$parent.toggleClass("active");
 				break;
@@ -27,8 +35,9 @@ $(function(){
 				break;
 			
 		}
+	}
 	
-		return false;
-	});
+	window.tv = window.tv || {};
+	window.tv.handle = handle;
 	
 });
