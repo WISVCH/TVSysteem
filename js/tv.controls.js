@@ -1,5 +1,6 @@
 // Concerned with the controls
 $(function(){
+	var playing;
 	
 	$(".tools li a").on("click", function(){
 		
@@ -11,6 +12,21 @@ $(function(){
 		return false;
 	});
 	
+	function activeLi(){
+		var selActive = ".activities li[data-id!=''].active",
+			selFirst = ".activities li[data-id!='']:first",
+			selFilter = "[data-id!='']",
+			$li = ($li = $(selActive)) && $li.size() > 0 && $li || $(selFirst),
+			$prev = $li.prev(selFilter).size() > 0 ? $li.prev() : $li.nextAll(selFilter).last(), 
+			$next = $li.next(selFilter).size() > 0 ? $li.next() : $li.prevAll(selFilter).last();
+			
+		return [$prev, $li, $next];
+	}
+	
+	function duration(){
+		return 5000;
+	}
+	
 	function handle(action){
 		switch(action){
 		
@@ -21,18 +37,32 @@ $(function(){
 			case 'full':
 				$button = $("[data-action=full]");
 				if(!$button.hasClass("active")){
-					if(chrome && chrome.app) chrome.app.window.current().maximize();
+					if(window.chrome && chrome.app) chrome.app.window.current().maximize();
 					document.body.webkitRequestFullscreen();
 				} else {
 					document.webkitExitFullscreen();
-					if(chrome && chrome.app) chrome.app.window.current().restore();
+					if(window.chrome && chrome.app) chrome.app.window.current().restore();
 				}
 				$button.toggleClass("active");
 				break;
 				
 			case 'play':
+				$button = $("[data-action=play]");
+				if(!$button.hasClass("active")){
+					playing = setTimeout(function auto(){
+						playing = setTimeout(auto, duration());
+						handle('down');
+					}, duration());
+				} else {
+					clearTimeout(playing);
+				}
+				$button.toggleClass("active");
+				break;
 			case 'up':
+				activeLi()[0].click();
+				break;		
 			case 'down':
+				activeLi()[2].click();
 				break;
 			
 		}

@@ -46,17 +46,17 @@ body > .tools-wrapper {
   bottom: 0;
   z-index: 1000;
 }
-body > .tools-wrapper:hover .tools {
-  display: block;
-}
 body > .tools-wrapper .tools {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  display: block;
+  display: none;
   background: rgba(0, 0, 0, 0.7);
+}
+body > .tools-wrapper:hover .tools {
+  display: block;
 }
 .template {
   display: none;
@@ -99,8 +99,12 @@ body > .tools-wrapper .tools {
   list-style: none;
   margin: 0;
 }
+.content > .scroll > ul > li.active.tv_item .whereabouts {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
 .content > .scroll > ul > li {
-  position: relative;
   margin-bottom: 5px;
   padding: 10px;
   background: #fff;
@@ -108,38 +112,57 @@ body > .tools-wrapper .tools {
   border-radius: 3px;
   box-shadow: inner 0 0 2px #000;
 }
-.content > .scroll > ul > li span.title {
+.content > .scroll > ul > li .whereabouts {
+  display: block;
+  width: 100%;
+}
+.content > .scroll > ul > li .whereabouts span.title {
   font-weight: bold;
   font-size: 150%;
 }
-.content > .scroll > ul > li span {
+.content > .scroll > ul > li .whereabouts span {
   font-weight: normal;
   font-size: 100%;
 }
-.content > .scroll > ul > li span:empty:before {
+.content > .scroll > ul > li .whereabouts span:empty:before {
   display: none;
 }
-.content > .scroll > ul > li .date:before {
+.content > .scroll > ul > li .whereabouts .date:before {
   content: " - ";
 }
-.content > .scroll > ul > li .location:before {
+.content > .scroll > ul > li .whereabouts .location:before {
   content: " - ";
 }
-.content > .scroll > ul > li .costs:before {
+.content > .scroll > ul > li .whereabouts .costs:before {
   content: " - ";
 }
 .content > .scroll > ul > li .body {
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 }
-.content > .scroll > ul > li .image-wrapper {
+.content > .scroll > ul > li .body .image-wrapper {
   float: right;
   padding: 0 0 0 15px;
   height: 100%;
 }
-.content > .scroll > ul > li .image-wrapper img.image {
+.content > .scroll > ul > li .body .image-wrapper img.image {
   max-height: 300px;
   max-width: 300px;
+}
+.content > .scroll > ul > li .body .image-wrapper img:not([src]) {
+  display: none;
+}
+.content > .scroll > ul > li .body .full {
+  z-index: 100;
+  margin: 5px -15px 5px -15px;
+  box-shadow: 0 0 5px #000;
+  clear: both;
+}
+.content > .scroll > ul > li .body .full img {
+  min-width: 100%;
+  max-width: 100%;
+  min-height: 200px;
+  display: block;
 }
 .tools ul {
   list-style: none;
@@ -187,15 +210,6 @@ body > .tools-wrapper .tools {
 .tools li.icon-down a {
   background-image: url('../lib/icons/metro/WindowsPhone/dark/appbar.chevron.down.png');
 }
-.content .full {
-  z-index: 100;
-  margin: 5px -15px 5px -15px;
-  box-shadow: 0 0 5px #000;
-}
-.content img {
-  max-width: 100%;
-  display: block;
-}
 .bar .qr {
   background-image: url(../images/calendar_qr.png);
   background-size: contain;
@@ -208,6 +222,9 @@ body.full .bar {
   left: -270px;
 }
 body.full .content {
+  left: 0;
+}
+body.full .content li.tv_item.active .body {
   left: 0;
 }
 /* Typography */

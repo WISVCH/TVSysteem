@@ -18,7 +18,7 @@ body {
 			background: url('../images/logo_ch.png') no-repeat center center; 
 			height: 94px;
 			-webkit-app-region: drag; 
-		}	
+		}
 	}
 	> .content { 
 		position: absolute; right: 0; top: 0; bottom: 0; left: 270px; height: 100%; 
@@ -35,13 +35,13 @@ body {
 		bottom: 0;
 		z-index: 1000;
 		
-		&:hover .tools { display: block; }
 		.tools {
 			position: absolute;
 			top: 0; left: 0; right: 0; bottom: 0;
-			display: block;
+			display: none;
 			background: rgba(0,0,0,.7);
 		}
+		&:hover .tools { display: block; }
 	}
 }
 
@@ -72,11 +72,14 @@ body {
 	}
 }
 
-.content > .scroll > ul { 
+.content > .scroll > ul {
 	padding: 0; list-style: none; margin: 0;
 	
+	> li.active.tv_item {	
+		.whereabouts { text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
+	}
+	
 	> li {
-		position: relative;
 		margin-bottom: 5px;
 		padding: 10px;
 		background: #fff;
@@ -84,27 +87,47 @@ body {
 		border-radius: 3px;
 		box-shadow: inner 0 0 2px #000;
 		
-		span.title { font-weight: bold; font-size: 150%; }
-		span { font-weight: normal; font-size: 100%; }
+		.whereabouts { 
+			display: block; width: 100%;
+			
+			span.title { font-weight: bold; font-size: 150%; }
+			span { font-weight: normal; font-size: 100%; }
+
+			span:empty:before { display: none; }
+			.date:before {	content: " - "; }
+			.location:before {	content: " - "; }
+			.costs:before {	content: " - "; }
+		}
 		
-		span:empty:before { display: none; }
-		.date:before {	content: " - "; }
-		.location:before {	content: " - "; }
-		.costs:before {	content: " - "; }
+	
 		
 		.body {
 			position: relative;
-			overflow: hidden;
-		}
-		
-		.image-wrapper {
-			float: right;
-			padding: 0 0 0 15px;
-			height: 100%;
+			overflow: visible;
 			
-			img.image { 
-				max-height: 300px;
-				max-width: 300px;
+			.image-wrapper {
+				float: right;
+				padding: 0 0 0 15px;
+				height: 100%;
+				
+				img.image { 
+					max-height: 300px;
+					max-width: 300px;
+				}
+				img:not([src]) { display: none; }
+			}
+			.full {
+				z-index: 100;
+				margin: 5px -15px 5px -15px;
+				box-shadow: 0 0 5px #000;
+				clear: both;
+				
+				img {
+					min-width: 100%;
+					max-width: 100%;
+					min-height: 200px;
+					display: block;
+				}
 			}
 		}
 	}
@@ -136,13 +159,6 @@ body {
 	li.icon-down a{ background-image: url('../lib/icons/metro/WindowsPhone/dark/appbar.chevron.down.png'); }
 }
 
-.content .full {
-	z-index: 100;
-	margin: 5px -15px 5px -15px;
-	box-shadow: 0 0 5px #000;
-}
-.content img { max-width: 100%; display: block; }
-
 .bar .qr {
 	background-image: url(../images/calendar_qr.png);
 	background-size: contain;
@@ -152,6 +168,7 @@ body {
 
 body.full .bar { left: -270px; }
 body.full .content { left: 0; }
+body.full .content li.tv_item.active .body { left: 0; }
 
 /* Typography */
 html, body { font-family: "Helvetica Neue"; font-size: 14pt; }

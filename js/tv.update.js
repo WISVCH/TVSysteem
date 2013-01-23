@@ -37,7 +37,11 @@ function rest(resource, parameters, fields){
 
 
 function fetch(callback){
-	$.getJSON(rest("all"), callback);
+	exports.data.get(["stream"], function(object){
+		callback(object.stream);
+	}, 3600*2*1000, function(store){
+		$.getJSON(rest("all"), function(list){ store({"stream": list}); });
+	});
 }
 
 function update(nodes){
@@ -81,6 +85,8 @@ function attrLookup(node, key) {
 		var date;
 		switch(node.type){
 			case 'tv_item':
+				date = "";
+				break;
 			case 'event': 
 				date = strip(node.date_event);
 				break;
@@ -94,19 +100,21 @@ function attrLookup(node, key) {
 		var body;
 		switch(node.type){
 			case 'tv_item':
-				body = "<div class='full'>"+node['image-fullscreen']+"</div>";
+				var b = $("<div class='full'><img /></div>");
+				fillImage(b.find("img"), findSrc(node['image-fullscreen'] || node.body));
+				body = b;
+				break;
 			default: body = node.body;
 		}
 		return body;
 	}
 	
 	if(key == 'image'){
-		var regexImg = /src="([^"]*)"/ig,
-			match = regexImg.exec(node.image);
-		if(match !== null){
-			var src = match.pop();
-			return src.replace("http://ch/", "https://ch.tudelft.nl/")
-		}
+		return findSrc(node.image).replace("http://ch/", "https://ch.tudelft.nl/");
+	}
+	
+	if(key == 'location' && node.location){
+		return strip(node.location);
 	}
 	
 	if(key == 'date_sort'){
@@ -131,6 +139,17 @@ function strip(html)
    var tmp = document.createElement("DIV");
    tmp.innerHTML = html;
    return tmp.textContent||tmp.innerText;
+}
+
+function findSrc(html)
+{
+	var regexImg = /src="([^"]*)"/ig,
+		match = regexImg.exec(html);
+	if(match !== null){
+		var src = match.pop();
+		return src;
+	}
+	return "";
 }
 
 /** 
@@ -166,7 +185,7 @@ function updateMain(nodes){
 				title: node.title,
 				date: attrLookup(node, 'date_view'),
 				costs: attrLookup(node, 'costs'),
-				location: node.location,
+				location: attrLookup(node, 'location'),
 				content: attrLookup(node, 'body'),
 				image: attrLookup(node, 'image')
 			}
@@ -188,12 +207,14 @@ function fillTemplate($template, data){
 		if(tag == "span")
 			$elem.text(value);
 		else if(tag == "img"){
-			if(isApp()) fillImage($elem, value);
-			else $elem.attr("src", value);
+			$elem.src = "loading.gif";
+			if(isApp() && value) fillImage($elem, value);
+			else if(value) $elem.attr("src", value);
 		}
 		else
 			$elem.append(value);
 	}
+	$template.find("img[src='']").remove();
 	return $template;
 }
 
@@ -203,32 +224,35 @@ function fillTemplate($template, data){
  */
 function fillImage($elem, src){
 	var key = "image-dataurl["+src+"]";
-	chrome.storage.local.get(key, function(blob){
-		if(blob[key] == null){
+	if(!src) return;
+	
+	exports.data.get(
+		[key], 
+		function handle(response){
+			if(response[key] != null)
+				$elem.attr("src", response[key]);
+		}, 
+		-1,
+		function orElse(store){
 			var request = new XMLHttpRequest();
 			request.open("GET", src);
 			request.responseType = "blob";
 			request.onloadend = function(response){
 				var img = document.createElement("img");
 				img.onload = function (e) {
-					var url = imageToDataUrl(img);
-				    // Store in Cache
-				    var data = {};
-				    data[key] = url;
-				    chrome.storage.local.set(data);
-				    // Cleanup
-				    window.URL.revokeObjectURL(img.src);
-				    // FillImage
-				    fillImage($elem, src);
+					var data = {};
+				    data[key] = imageToDataUrl(img); // Convert temporary url to data url
+				    window.URL.revokeObjectURL(img.src); // Cleanup
+				    store(data); // Continue procedure
 				};
 				img.src = window.URL.createObjectURL(response.target.response);
 			};
 			request.send();
-		} else {
-			if(blob[key].indexOf("undefined") != -1) debugger;
-			$elem.attr("src", blob[key]);
 		}
-	});
+	);
+	
+	// Chain
+	return $elem;
 }
 
 function imageToDataUrl(img){
@@ -241,15 +265,13 @@ function imageToDataUrl(img){
 	return url;
 }
 
-$(window).on("keypress", function(){fetch(update);});
-
 window.update = function(){
 	fetch(update);
 };
 $(function(){
 	$("#update").on("click", window.update).hide();
 	
+	fetch(update);
 });
-fetch(update);
 
 })();

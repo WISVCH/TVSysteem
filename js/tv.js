@@ -1,6 +1,11 @@
 // Running system
 (function(){
 
+var fullscreen = false, scrollTopItem;
+function liOffset(){
+	return fullscreen ? -50 : 5;
+}
+
 // Make all items in main content fixed-height, so current scrollTop won't be affected by going fullscreen
 function makeFixed(){
 	$(".content li.active").prevAll().each(function(){
@@ -18,7 +23,7 @@ function releaseFixed(){
 }
 
 // Scroll to an element on the page, neatly
-function scrollTo(el, duration){
+function goTo(el, duration){
 	if(typeof duration == "undefined") duration = 500;
 	if(!el){
 		var id = $(document.body).attr("data-scroll");
@@ -28,27 +33,54 @@ function scrollTo(el, duration){
 	}
 	
 	// Go
-	$(".content *").removeClass("active");
-	var $item = $("#"+id).addClass("active");
-	$(".content").animate({
-		scrollTop: $item.position().top + $(".content").scrollTop() - 5
-	}, duration);
+	$("#content *").removeClass("active");
+	var $item = scrollTopItem = $("#"+id).addClass("active");
+	fullscreen = $item.find(".full").size() > 0;
+	
+	$("#content").clearQueue().animate({
+		scrollTop: $item.position().top + $("#content").scrollTop() - liOffset()
+	}, {
+		duation: duration, 
+		complete: function(){
+			if($item.find(".full").size() > 0){
+				bar.hide();
+			} else {
+				bar.show();
+			}
+			return false;
+		}
+	});
+}
+
+var bar = {
+	show: function(){ this.toggle(2); },
+	hide: function(){ this.toggle(0); },
+	toggle: function(direction){
+		var f = ["addClass", "toggleClass", "removeClass"];
+		if(typeof direction == 'undefined') direction = 1;
+		makeFixed();
+		$("body")[f[direction]]("full");
+		$("#content").clearQueue().animate({
+			scrollTop: scrollTopItem.position().top + $("#content").scrollTop() - liOffset()
+		}, 700, function(){
+			releaseFixed();
+			$("#content").scrollTop(scrollTopItem.position().top + $("#content").scrollTop() - liOffset());
+		});
+	}
 }
 
 // Events
 $(function(){
 	$("body").on("keyup", function(event){
 		if(String.fromCharCode(event.keyCode) == "A"){
-			makeFixed();
-			$(this).toggleClass("full");
-			setTimeout(releaseFixed, 550);
+			bar.toggle();
 		}
 	});
 	
 	$("body").on("click", ".bar li[data-id]", function(){
 		$(this).siblings().removeClass("active");
 		$(this).addClass("active");
-		scrollTo(this);
+		goTo(this);
 	});
 });
 
