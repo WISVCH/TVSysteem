@@ -5,13 +5,18 @@
   "version": "0.1",
   "app": {
     "background": {
-      "scripts": ["js/background.js"]
+      "page": "background.html"
     }
   },
   "permissions": [
       "http://ch/",
       "https://ch.tudelft.nl/",
       "http://huidigeroosters.tudelft.nl/",
-      "storage"
+      "storage",
+      {"socket": [
+        "udp-bind:*",
+        "udp-send-to:*"
+      ]},
+	  "background"
   ]
 }

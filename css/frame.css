@@ -1,3 +1,17 @@
+body > .remote-control {
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  bottom: 10%;
+  width: 600px;
+  margin-left: -300px;
+  z-index: 10000;
+  background: white;
+  border: 1px solid #aaa;
+  box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
 body > .bar,
 body > .content {
   overflow-x: hidden;

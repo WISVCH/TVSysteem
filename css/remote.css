@@ -1,0 +1,53 @@
+body, html { margin: 0; padding: 0; }
+
+header li,
+header button,
+header input[type="text"] {
+  top: 7px;
+  line-height: 20pt;
+  display: inline-block;
+  font-size: 8.5pt;
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
+  min-width: 5.5em;
+  position: relative;
+  height: 28px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  margin: 0 2.5pt;
+  border: 1px solid transparent;
+  text-align: center;
+}
+
+header {
+	height: 40px;
+	border-bottom: 2px solid gray;
+}
+
+header button,
+header input[type="text"] {
+  -webkit-app-region: no-drag;
+}
+
+header .small {
+  min-width: 3em;
+}
+
+header li {
+  border-radius: 2px;
+  background: #e2e2e2;
+  color: #222;
+  min-width: 10.5em;
+  padding: 0 5px;
+}
+
+header button {
+  border-radius: 2px;
+  border-color: rgba(0, 0, 0, 0.0976563);
+  background: transparent -webkit-linear-gradient(top, whiteSmoke, #f1f1f1);
+  color: #444;
+  cursor: pointer;
+  min-width: 7em;
+  float: right;
+}

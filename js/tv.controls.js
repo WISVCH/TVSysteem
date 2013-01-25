@@ -71,4 +71,24 @@ $(function(){
 	window.tv = window.tv || {};
 	window.tv.handle = handle;
 	
+	$(function(){
+		$("#bar, #bar *, #content, #content *").on("keydown", function(event){
+			// Prevent scrolling with keyboard
+			if([32,33,34,35,36,37,38,39,40].indexOf(event.which) != -1){
+				event.preventDefault();
+				return false;
+			}
+			return true;
+		});
+		$(window).on("keydown", function(event){
+			if(event.which == 40){
+				handle('down');
+			} else if(event.which == 38){
+				handle('up');
+			} else if(event.which == 32){
+				handle('play');
+			}
+		});
+	});
+	
 });
