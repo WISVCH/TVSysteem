@@ -1,22 +1,29 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="stream">
 <head>
 	<title>TV Systeem</title>
 	<link rel="stylesheet" type="text/css" href="css/frame.css" />
 	<link rel="stylesheet" type="text/css" href="css/remote.css" />
 	<script src="lib/shiftingtiles/jquery-1.8.3.js"></script>
 	<script src="lib/underscore-1.4.2/underscore-min.js"></script>
+	<script src="components/angular/angular.min.js"></script>
+  <script src="components/angular-resource/angular-resource.min.js"></script>
+  <script src="components/angular-sanitize/angular-sanitize.min.js"></script>
 	<script src="lib/date.js/build/date-nl-NL.js"></script>
-	<script src="lib/mdns-browser/dns.js"></script>
+	<script src="js/tv.js"></script>
+	<!--<script src="lib/mdns-browser/dns.js"></script>
 	<script src="lib/mdns-browser/servicefinder.js"></script>
 	<script src="js/tv.js"></script>
 	<script src="js/tv.tools.js"></script>
 	<script src="js/tv.update.js"></script>
 	<script src="js/tv.controls.js"></script>
 	<script src="js/tv.today.js"></script>
-	<script src="js/tv.remote.js"></script>
+	<script src="js/tv.remote.js"></script>-->
+	<script src="js/tv.tools.js"></script>
+	<script src="js/tv.controls.js"></script>
+	<script src="js/tv.stream.js"></script>
 </head>
-<body>
+<body ng-controller="StreamController">
 	<div class="tools-wrapper"><div class="tools"><ul>
 		<li data-action="close" class="icon-power"><a href="#close">Close</a></li>
 		<li data-action="full" class="icon-full"><a href="#fullscreen">Toggle fullscreen</a></li>
@@ -24,64 +31,45 @@
 		<li data-action="up" class="icon-up"><a href="#up">Up</a></li>
 		<li data-action="play" class="icon-play"><a href="#play">Play</a></li>
 		<li data-action="down" class="icon-down"><a href="#down">Down</a></li>
+		<li class="spacer"></li>
+		<li class="spacer"></li>
+		<li class="spacer"></li>
+		<li class="spacer"></li>
+		<li data-action="connect" class="icon-connect"><a href="#connect">Connect</a></li>
 	</ul></div></div>
+	
 	<div class="bar" id="bar">
 		<div class="scroll">
 			<div class="logo"></div>
 			<ul class="activities">
-				<li class="template" data-id="" class="active">
-					<span class="title"></span>
-					<span class="date"></span>
+				<li ng-repeat="node in nodes | orderBy:'sort_date' | limitToRelevant" data-id="{{node.nid}}">
+					<span class="title">{{node.title}}</span>
+					<span class="date">{{node.date}}</span>
 				</li>
 			</ul>
 			<h2>CH calender op je telefoon?</h2>
 			<div class="qr"><img src="images/clear_1x1.png" style="width:100%;" /></div>
 		</div>
 	</div>
+	
 	<div class="content" id="content">
-		<button id="update">Fetch</button>
 		<div class="scroll">
 			<ul>
-				<li class="template item" id="10">
+				<li ng-repeat="node in nodes | orderBy:'sort_date' | limitToRelevant" id="{{node.nid}}" class="item item-{{node.type}} {{node.type}}">
 					<div class="whereabouts">
-						<span class="title"></span>
-						<span class="date"></span>
-						<span class="location"></span>
-						<span class="costs"></span>
+						<span class="title">{{node.title}}</span>
+						<span class="date">{{node.date}}</span>
+						<span class="location">{{node.location}}</span>
+						<span class="costs">{{node.costs}}</span>
 					</div>
 					<div class="body">
 						<div class="content">
-							<div class="image-wrapper"><img class="image" /></div>
+							<div class="pull-right image-wrapper"><img class="image" ng-src="{{node.getImage()}}" /></div>
+							<div ng-bind-html-unsafe="node.getHtml()"></div>
 						</div>
 					</div>
 					<div class="clear"></div>
 				</li>
-				<!--<li class="item" id="15">
-					<span class="title">Tentamens <span class="date">7 januari 2013 tot 1 februari</span></span>
-					<div class="full"><img src="images/Exams-TV.jpg" /></div>
-				</li>
-				<li class="item" id="20">
-					<span class="title">Algemene Vergadering 5 <span class="date">15 januari 2013</span><span class="location">Snijderzaal</span></span>
-					<p>Deze vergadering, die speciaal voor de Reiscommissie is ingelast, zal gehouden worden in de Snijderszaal in faculteit EWI aan de Mekelweg 4 te Delft, waarbij de voorlopige agenda als volgt is opgesteld:
-<pre>Opening
-Agenda
-Notulen Algemene Vergadering d.d. 18 december 2012
-Ingekomen en uitgegane stukken
-Mededelingen van het Bestuur
-Mededelingen van de Verificatiecommissie
-Presentatie Voortgang Reiscommissie
-GO / NO GO Reis
-W.v.t.t.k.
-Rondvraag
-Sluiting</pre>
-					</p>
-				</li>
-				<li class="item" id="30">
-					<span class="title">Alumni Nieuwjaarsreceptie <span class="date">18 januari 2013</span></span>
-				</li>
-				<li class="item" id="40">
-					<span class="title">Wintersport <span class="date">1 februari 2013</span><span class="costs">&euro;300</span></span>
-				</li>-->
 			</ul>
 		</div>
 	</div>

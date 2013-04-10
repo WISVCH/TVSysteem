@@ -51,3 +51,24 @@ header button {
   min-width: 7em;
   float: right;
 }
+
+/* Size of screens control */
+.plane {
+	height: 300px;
+	position: relative;
+	border: 1px solid black;
+	box-shadow: 0 0 5px rgba(0,0,0,.2);
+	font-size: .8em;
+}
+.plane .tv, .plane .tv-template {
+	position: absolute;
+	border: 1px solid #666;
+	overflow: hidden;
+}
+.plane .tv .drag { height: 10px; background: red; content: "Drag"; }
+.plane .tv .resize { position: absolute; bottom: 0; right: 0; height: 20px; width: 20px; background: red; content: "Resize"; }
+.plane input { width: 40px !important; display: inline-block; height: 14px; line-height: 14px; padding: 2px; margin-bottom: 0; }
+.plane input[name='w'], .plane input[name='h'] { width: 50px !important; }
+
+.plane .tv-template { position: absolute; top: 0; right: 0; }
+.plane .tv-template content { display: none; }

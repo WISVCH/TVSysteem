@@ -24,7 +24,7 @@ $(function(){
 	}
 	
 	function duration(){
-		return 5000;
+		return 10000;
 	}
 	
 	function handle(action){
@@ -65,6 +65,8 @@ $(function(){
 				activeLi()[2].click();
 				break;
 			
+			case 'connect':
+				break;
 		}
 	}
 	

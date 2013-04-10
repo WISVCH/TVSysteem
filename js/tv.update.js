@@ -1,7 +1,6 @@
 // Concerned with filling and maintaining the content
 (function(){
-
-var endpoint = "http://ch/api/tv";
+var endpoint = "https://ch.tudelft.nl/api/tv";
 /* API
  * - get news & activities; advo's
  * - sort & make unique
@@ -40,7 +39,11 @@ function fetch(callback){
 	exports.data.get(["stream"], function(object){
 		callback(object.stream);
 	}, 3600*2*1000, function(store){
-		$.getJSON(rest("all"), function(list){ store({"stream": list}); });
+		console.log("Fetching", rest("all"));
+		$.getJSON(
+			rest("all"), 
+			function(list){ console.log("storing", list); store({"stream": list}); },
+			function(){ console.error("Request to REST failed."); });
 	});
 }
 
@@ -268,6 +271,7 @@ function imageToDataUrl(img){
 window.update = function(){
 	fetch(update);
 };
+window.rest = rest;
 $(function(){
 	$("#update").on("click", window.update).hide();
 	

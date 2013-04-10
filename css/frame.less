@@ -76,6 +76,7 @@ body {
 	padding: 0; list-style: none; margin: 0;
 	
 	> li.active.tv_item {	
+		.body .full { display: block; opacity: 1; height: auto; }
 		.whereabouts { text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
 	}
 	
@@ -121,6 +122,10 @@ body {
 				margin: 5px -15px 5px -15px;
 				box-shadow: 0 0 5px #000;
 				clear: both;
+				display: none;
+				opacity: 0;
+				height: 0;
+				-webkit-transition: opacity .5s;
 				
 				img {
 					min-width: 100%;
@@ -157,6 +162,8 @@ body {
 	li.icon-play.active a{ background-image: url('../lib/icons/metro/WindowsPhone/dark/appbar.control.pause.png'); }
 	li.icon-up a{ background-image: url('../lib/icons/metro/WindowsPhone/dark/appbar.chevron.up.png'); }
 	li.icon-down a{ background-image: url('../lib/icons/metro/WindowsPhone/dark/appbar.chevron.down.png'); }
+	li.icon-connect a{ background-image: url('../lib/icons/metro/WindowsPhone/dark/appbar.connect.png'); }
+	li.icon-connect.active a{ background-image: url('../lib/icons/metro/WindowsPhone/dark/appbar.disconnect.png'); }
 }
 
 .bar .qr {

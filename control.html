@@ -6,21 +6,31 @@
 	<script src="lib/shiftingtiles/jquery-1.8.3.js"></script>
 	<script src="lib/underscore-1.4.2/underscore-min.js"></script>
 	<script src="lib/date.js/build/date-nl-NL.js"></script>
+	<script src="lib/drag.min.js"></script>
 	<script src="js/tv.tools.js"></script>
+	<script src="js/tv.remote.js"></script>
+	<link rel="stylesheet" href="css/bootstrap.css" type="text/css" />
+	<link rel="stylesheet" href="css/remote.css" type="text/css" />
 </head>
 <body>
 	<div class="remote-control">
 		<header>
-		  <button class="primary" id="btn-close" accessKey="l">
-		    C<u>l</u>ose</button>
-		  </button>
-		  <button class="feature" id="btn-refresh" accessKey="e">
-		    R<u>e</u>fresh
-		  </button>
-		  <li>Select remote system: <select id="select-remote" accessKey="b">
-			  <option></option>
-		  </select></li>
+		  <h1>TV Systeem</h2>
 		</header>
+		<section class="plane">
+				<div class="tv-template">
+					<a>Add</a>
+					<content>
+						<div class="drag"></div>
+						<input name="id" value="" type="hidden" />
+						<div>X: <input name="x" type="number" /></div>
+						<div>Y: <input name="y" type="number" /></div>
+						<div>Width: <input name="w" type="number" step="10" min="0" max="1920" value="1920" placeholder="width" /></div>
+						<div>Height: <input name="h" type="number" step="10" min="0" max="1080" value="1080" placeholder="height" /></div>
+						<div class="resize"></div>
+					</content>
+				</div>
+		</section>
 	</div>
 </body>
 </html>
